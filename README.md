@@ -1,4 +1,4 @@
-# rag-demo (FastAPI + Postgres/pgvector + OpenAI)
+# rag-demo-pvector (FastAPI + Postgres/pgvector + OpenAI)
 
 A deliberately small, interview-friendly **RAG** demo you can run:
 
