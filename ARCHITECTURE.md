@@ -3,12 +3,12 @@
 ## Components (minimal RAG)
 
 1. **FastAPI service** (single container)
-   - Ingest: chunk → embed → store (Postgres/pgvector)
+   - Ingest: chunk → embed → store (Postgres/pg_embedding)
    - Ask: embed question → retrieve top-k → generate answer → return citations
 
-2. **Postgres + pgvector**
+2. **Postgres + pg_embedding**
    - Stores documents, chunks, and chunk embeddings.
-   - Retrieval is a single SQL query using pgvector distance ordering.
+   - Retrieval is a single SQL query using pg_embedding distance ordering.
 
 ## Data flow
 
@@ -37,7 +37,7 @@ Tables:
 - `chunks(id, document_id, chunk_index, content, embedding, created_at)`
 
 Index:
-- pgvector IVFFLAT index on `chunks.embedding` (created when possible).
+- pg_embedding HNSW index on `chunks.embedding` (created when possible).
 
 ## Deployments
 

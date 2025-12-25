@@ -1,17 +1,17 @@
 from __future__ import annotations
 
-from sqlalchemy import select
+from sqlalchemy import cast, func, select
 from sqlalchemy.orm import Session
-from pgvector.sqlalchemy import Vector
 
-from app.rag.schema import Chunk, Document
+from app.rag.db_types import Embedding
+from app.rag.schema import Chunk, Document, EMBEDDING_DIM
 
 def retrieve_top_k(session: Session, query_embedding: list[float], top_k: int) -> list[dict]:
-    # Use L2 distance for robustness across pgvector versions (cosine occasionally returns no rows with bound params).
+    query_vector = cast(query_embedding, Embedding(EMBEDDING_DIM))
     stmt = (
         select(Chunk.id, Chunk.content, Document.source)
         .join(Document, Document.id == Chunk.document_id)
-        .order_by(Chunk.embedding.l2_distance(query_embedding))
+        .order_by(func.cosine_distance(Chunk.embedding, query_vector))
         .limit(top_k)
     )
     rows = session.execute(stmt).all()

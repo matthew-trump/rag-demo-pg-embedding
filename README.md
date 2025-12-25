@@ -1,11 +1,11 @@
-# rag-demo-pvector (FastAPI + Postgres/pgvector + OpenAI)
+# rag-demo-pg-embedding (FastAPI + Postgres/pg_embedding + OpenAI)
 
 A deliberately small, interview-friendly **RAG** demo you can run:
 
 - **Locally** with `uvicorn`
 - **Locally in Docker** (optimized for **linux/arm64** dev)
 - **On AWS** using **ECR + ECS Fargate** (runs **linux/amd64**), provisioned with **Terraform**
-- Uses **Postgres + pgvector** for both metadata + vector search (local Postgres in Docker; cloud Postgres via RDS)
+- Uses **Postgres + pg_embedding** for both metadata + vector search (local Postgres in Docker; cloud Postgres via RDS)
 
 This project targets Python 3.13.x.
 If you use pyenv: 
@@ -36,7 +36,7 @@ This is useful for CI and for trying the flow without API costs.
 
 ## Quick start (local)
 
-### 1) Start Postgres (with pgvector)
+### 1) Start Postgres (with pg_embedding)
 ```bash
 docker compose up -d postgres
 ```
@@ -126,8 +126,8 @@ Environment variables:
 ## Notes
 - This is intentionally **not** LangChain — the goal is to be transparent and minimal.
 - The AWS setup uses **Fargate**, **ALB**, **CloudWatch Logs**, **Secrets Manager** (for DB password), and **RDS Postgres**.
-- pgvector is enabled via `CREATE EXTENSION IF NOT EXISTS vector;` on startup.
-- Retrieval uses L2 distance (not cosine) because pgvector 0.8.1 can return no rows for `cosine_distance` when bound parameters are used. If you upgrade pgvector (≥0.9) and configure `ivfflat.probes`, you can switch back to cosine by changing `retrieve_top_k` in `app/rag/retrieval.py`.
+- pg_embedding is enabled via `CREATE EXTENSION IF NOT EXISTS pg_embedding;` on startup.
+- Retrieval uses cosine distance via `cosine_distance(...)`; if your pg_embedding build exposes a different distance function/operator, update `retrieve_top_k` in `app/rag/retrieval.py`.
 - OpenAI calls use the Chat Completions API (`client.chat.completions.create`) for broad client compatibility. If you want to switch to the newer Responses API, ensure your `openai` SDK supports it and update `app/rag/llm.py`.
 
 See:

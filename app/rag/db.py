@@ -10,13 +10,12 @@ engine = create_engine(settings.database_url, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 def init_db() -> None:
-    # Ensure pgvector extension exists (no-op if already created)
+    # Ensure pg_embedding extension exists (no-op if already created)
     with engine.begin() as conn:
-        conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector;"))
+        conn.execute(text("CREATE EXTENSION IF NOT EXISTS pg_embedding;"))
     Base.metadata.create_all(bind=engine)
 
-    # Attempt to create an IVFFLAT index (safe to fail in constrained envs)
-    # Requires: SET ivfflat.probes at query-time for tuning (optional).
+    # Attempt to create an HNSW index (safe to fail in constrained envs)
     with engine.begin() as conn:
         try:
             conn.execute(text("""
@@ -25,10 +24,10 @@ def init_db() -> None:
                     IF NOT EXISTS (
                         SELECT 1 FROM pg_class c
                         JOIN pg_namespace n ON n.oid = c.relnamespace
-                        WHERE c.relname = 'idx_chunks_embedding_ivfflat'
+                        WHERE c.relname = 'idx_chunks_embedding_hnsw'
                     ) THEN
-                        CREATE INDEX idx_chunks_embedding_ivfflat
-                        ON chunks USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
+                        CREATE INDEX idx_chunks_embedding_hnsw
+                        ON chunks USING hnsw (embedding);
                     END IF;
                 END $$;
             """))

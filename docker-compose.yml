@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: pgvector/pgvector:pg16
+    image: ghcr.io/pgembedding/pg_embedding:pg16
     environment:
       POSTGRES_USER: rag
       POSTGRES_PASSWORD: rag

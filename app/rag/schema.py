@@ -4,7 +4,8 @@ from datetime import datetime
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, String, DateTime, Integer, Text
 from sqlalchemy.dialects.postgresql import JSONB
-from pgvector.sqlalchemy import Vector
+
+from app.rag.db_types import Embedding
 
 EMBEDDING_DIM = 1536  # matches text-embedding-3-small; mock mode also uses this
 
@@ -29,7 +30,7 @@ class Chunk(Base):
     document_id: Mapped[int] = mapped_column(ForeignKey("documents.id", ondelete="CASCADE"))
     chunk_index: Mapped[int] = mapped_column(Integer)
     content: Mapped[str] = mapped_column(Text)
-    embedding: Mapped[list[float]] = mapped_column(Vector(EMBEDDING_DIM))
+    embedding: Mapped[list[float]] = mapped_column(Embedding(EMBEDDING_DIM))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     document: Mapped["Document"] = relationship(back_populates="chunks")

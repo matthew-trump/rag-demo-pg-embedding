@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `app/main.py` is the FastAPI entrypoint; `app/rag/` holds core modules (`api.py` routes, `db.py`/`schema.py` for Postgres + pgvector, `chunking.py`, `embeddings.py`, `retrieval.py`, `llm.py`, `prompts.py`, `settings.py`).
+- `app/main.py` is the FastAPI entrypoint; `app/rag/` holds core modules (`api.py` routes, `db.py`/`schema.py` for Postgres + pg_embedding, `chunking.py`, `embeddings.py`, `retrieval.py`, `llm.py`, `prompts.py`, `settings.py`).
 - `data/` contains sample `.txt` files for `/ingest_dir`.
 - `docker/` has the service `Dockerfile`; `docker-compose.yml` starts Postgres (and the API when built).
 - `infra/terraform/aws/` provisions the AWS stack (ECR/ECS/RDS/ALB); `scripts/` includes helpers like `ecr_build_push.sh`.

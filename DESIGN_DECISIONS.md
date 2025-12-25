@@ -1,6 +1,6 @@
 # Design decisions
 
-## Why Postgres + pgvector?
+## Why Postgres + pg_embedding?
 - One system for metadata + vectors.
 - Local == cloud (Docker Postgres locally; RDS in AWS).
 - Easy to explain and debug.
