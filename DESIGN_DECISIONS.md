@@ -4,6 +4,7 @@
 - One system for metadata + vectors.
 - Local == cloud (Docker Postgres locally; RDS in AWS).
 - Easy to explain and debug.
+Note: pg_embedding is archived/deprecated by Neon; prefer pgvector for new work.
 
 ## Why a single FastAPI container?
 - Minimizes moving parts for a demo.

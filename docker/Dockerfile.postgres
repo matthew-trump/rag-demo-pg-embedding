@@ -1,0 +1,20 @@
+FROM postgres:16
+
+ARG PG_EMBEDDING_REF=master
+ARG PG_EMBEDDING_ARCHIVE_URL=https://github.com/neondatabase/pg_embedding/archive/refs/heads/${PG_EMBEDDING_REF}.tar.gz
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        curl \
+        postgresql-server-dev-16 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /tmp/pg_embedding \
+    && curl -fsSL "${PG_EMBEDDING_ARCHIVE_URL}" -o /tmp/pg_embedding.tar.gz \
+    && tar -xzf /tmp/pg_embedding.tar.gz --strip-components=1 -C /tmp/pg_embedding \
+    && cd /tmp/pg_embedding \
+    && make \
+    && make install \
+    && rm -rf /tmp/pg_embedding /tmp/pg_embedding.tar.gz

@@ -1,6 +1,8 @@
 services:
   postgres:
-    image: ghcr.io/pgembedding/pg_embedding:pg16
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.postgres
     environment:
       POSTGRES_USER: rag
       POSTGRES_PASSWORD: rag

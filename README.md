@@ -40,6 +40,7 @@ This is useful for CI and for trying the flow without API costs.
 ```bash
 docker compose up -d postgres
 ```
+The first run builds a local Postgres image with pg_embedding from source, so it may take a minute.
 
 ### 2) Create a venv and run FastAPI
 ```bash
@@ -128,6 +129,7 @@ Environment variables:
 - The AWS setup uses **Fargate**, **ALB**, **CloudWatch Logs**, **Secrets Manager** (for DB password), and **RDS Postgres**.
 - pg_embedding is enabled via `CREATE EXTENSION IF NOT EXISTS pg_embedding;` on startup.
 - Retrieval uses cosine distance via `cosine_distance(...)`; if your pg_embedding build exposes a different distance function/operator, update `retrieve_top_k` in `app/rag/retrieval.py`.
+- pg_embedding is archived/deprecated by Neon; see their notice in the upstream repo and prefer pgvector for new work.
 - OpenAI calls use the Chat Completions API (`client.chat.completions.create`) for broad client compatibility. If you want to switch to the newer Responses API, ensure your `openai` SDK supports it and update `app/rag/llm.py`.
 
 See:

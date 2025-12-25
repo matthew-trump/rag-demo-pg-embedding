@@ -9,6 +9,7 @@
 2. **Postgres + pg_embedding**
    - Stores documents, chunks, and chunk embeddings.
    - Retrieval is a single SQL query using pg_embedding distance ordering.
+   - pg_embedding is archived/deprecated by Neon; prefer pgvector for new work.
 
 ## Data flow
 
